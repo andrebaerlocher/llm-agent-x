@@ -22,6 +22,9 @@ from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExport
 from opentelemetry.trace import Tracer, Span, StatusCode
 from openinference.semconv.trace import SpanAttributes
 
+# --- LLM Provider Imports ---
+from llm_agent_x.llm_manager import get_default_model_name
+
 # --- Basic Setup ---
 load_dotenv(".env", override=True)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -311,7 +314,7 @@ class DAGAgent:
     def __init__(
             self,
             registry: Optional[TaskRegistry] = None,
-            llm_model: str = "gpt-4o-mini",
+            llm_model: Optional[str] = None,
             tracer: Optional[Tracer] = None,
             tools: Optional[List[Any]] = None,
             global_proposal_limit: int = 5,
@@ -322,7 +325,8 @@ class DAGAgent:
         self.registry = registry or TaskRegistry()
         self.inflight = set()
         self.task_futures: Dict[str, asyncio.Task] = {}
-        self.base_llm_model = llm_model
+        # Use provider-aware model name, defaulting to configured provider
+        self.base_llm_model = llm_model or get_default_model_name()
         self.tracer = tracer or trace.get_tracer(__name__)
         self.global_proposal_limit = global_proposal_limit
         self.max_grace_attempts = max_grace_attempts
@@ -897,7 +901,7 @@ if __name__ == "__main__":
     reg.add_task(root_task)
     agent = DAGAgent(
         registry=reg,
-        llm_model="gpt-4o-mini",
+        llm_model=None,  # Use default from provider configuration
         tracer=trace.get_tracer("hybrid_dag_demo"),
         global_proposal_limit=2,
         max_grace_attempts=1,
