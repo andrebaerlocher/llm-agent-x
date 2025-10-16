@@ -11,6 +11,7 @@ The entire system is containerized with Docker and orchestrated through a messag
 ## Features
 
 -   **Interactive DAG Agent**: A persistent agent that models tasks as a graph, allowing for complex dependencies and adaptive planning.
+-   **Multiple LLM Provider Support**: Use OpenAI, LM Studio, or Ollama as your language model backend. See [LLM Provider Configuration](./docs/llm_providers.md).
 -   **Real-time Mission Control UI**: A Next.js frontend for launching, monitoring, and controlling agent execution in real-time.
 -   **Message Queue Architecture**: Decoupled Gateway and Worker components communicate via RabbitMQ for resilience and scalability.
 -   **Fully Dockerized**: The entire stack—UI, Gateway, Worker, and RabbitMQ—is managed with a single `docker-compose` command.
@@ -42,12 +43,21 @@ cp .env.example .env
 Now, edit the `.env` file and add your required API keys:
 
 ```env
-# Required for the agent worker to function
+# LLM Provider Configuration (choose one: openai, lmstudio, ollama)
+LLM_PROVIDER=openai
+
+# Required for OpenAI provider
 OPENAI_API_KEY="your_openai_api_key"
+
+# Required for web search functionality
 BRAVE_API_KEY="your_brave_search_api_key"
+
+# For local LLM providers (LM Studio or Ollama), see docs/llm_providers.md
 
 # Other variables are pre-configured for Docker Compose
 ```
+
+> 💡 **Tip**: You can use local LLM providers like LM Studio or Ollama instead of OpenAI. See the [LLM Provider Configuration Guide](./docs/llm_providers.md) for details.
 
 ### 3. Run the Application
 
@@ -77,6 +87,7 @@ While the primary interface is the interactive UI, the underlying `llm-agent-x` 
 ## Documentation
 
 -   [**Running the Application**](./docs/installation.md): The primary guide to get the full application running with Docker.
+-   [**LLM Provider Configuration**](./docs/llm_providers.md): Configure OpenAI, LM Studio, or Ollama as your LLM backend.
 -   [**Interactive Mode**](./docs/interactive_mode.md): An in-depth look at the architecture and how to control the agent.
 -   [**Gateway API Reference**](./docs/api.md): Detailed documentation for the REST and Socket.IO API.
 -   [**Python Sandbox**](./docs/sandbox.md): Information on the code execution sandbox.
