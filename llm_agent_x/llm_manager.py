@@ -6,8 +6,7 @@ for use with pydantic_ai Agents throughout the application.
 """
 
 from os import getenv
-from llm_agent_x.llm_providers.factory import create_provider
-from llm_agent_x.llm_providers.base import LLMProvider
+from llm_agent_x.llm_providers import create_provider, LLMProvider
 
 
 # Create the default provider based on environment configuration

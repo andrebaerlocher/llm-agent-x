@@ -3,7 +3,7 @@ LM Studio LLM Provider implementation.
 """
 
 from typing import Any
-from llm_agent_x.llm_providers.base import LLMProvider
+from .base import LLMProvider
 
 
 class LMStudioProvider(LLMProvider):
