@@ -6,7 +6,13 @@ for use with pydantic_ai Agents throughout the application.
 """
 
 from os import getenv
-from llm_agent_x.llm_providers import create_provider, LLMProvider
+
+# Use try-except to handle imports when full package dependencies aren't available
+try:
+    from llm_agent_x.llm_providers import create_provider, LLMProvider
+except ImportError:
+    # Fallback for when testing providers in isolation
+    from .llm_providers import create_provider, LLMProvider
 
 
 # Create the default provider based on environment configuration
